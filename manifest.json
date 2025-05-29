@@ -12,11 +12,18 @@
     "default_popup": "src/popup/popup.html"
   },
   "background": {
-    "service_worker": "src/background/index.js"
+    "service_worker": "src/background/index.js",
+    "type": "module"
   },
   "host_permissions": [
     "https://accounts.spotify.com/*",
     "https://api.spotify.com/*",
     "https://generativelanguage.googleapis.com/*"
-  ]
+  ],
+  "icons": {
+  "16": "public/logo.png",
+  "32": "public/logo.png",
+  "48": "public/logo.png",
+  "128": "public/logo.png"
+  }
 }

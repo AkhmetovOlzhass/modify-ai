@@ -25,8 +25,8 @@
 
 ## 🛠 Installation
 
-1. Clone or download this repo
-2. Open `chrome://extensions/`
+1. Clone or download this repo 
+2. Open `chrome://extensions/` in the upper right corner
 3. Enable "Developer mode"
 4. Click "Load unpacked"
 5. Select the `moodify-ai/` folder

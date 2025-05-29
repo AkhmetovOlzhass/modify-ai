@@ -37,7 +37,7 @@
 
 ### 🔑 Google Gemini API Key
 
-1. Get your API key at [https://ai.google.dev](https://ai.google.dev)
+1. Get your API key at [https://aistudio.google.com/apikey](https://aistudio.google.com/apikey)
 2. Paste it in the extension settings after installation
 
 ---

@@ -53,6 +53,7 @@
 
 ## 📦 Folder Structure
 
+```text
 spotify-mood-extension/
 ├── public/                       # Static assets (icons, screenshots, etc.)
 ├── src/
@@ -84,6 +85,7 @@ spotify-mood-extension/
 ├── LICENSE                       # MIT License
 ├── manifest.json                 # Chrome extension manifest (v3)
 └── README.md                     # Project documentation
+```
 
 ---
 

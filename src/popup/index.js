@@ -91,74 +91,68 @@ async function handleGeminiKeySave() {
 }
 
 async function handlePlaylistGeneration() {
-    const moodInput = document.getElementById('moodInput');
-    const mood = moodInput.value.trim();
-    const geminiKey = localStorage.getItem('gemini_api_key');
-    let spotifyToken;
+  const moodInput = document.getElementById('moodInput');
+  const mood = moodInput.value.trim();
+  const geminiKey = localStorage.getItem('gemini_api_key');
+  let spotifyToken;
 
-    try {
-        spotifyToken = await getValidAccessToken();
-    } catch {
-        modal.show('Authentication Required', 'Please connect to Spotify to continue.', '🔐');
-        return;
+  try {
+    spotifyToken = await getValidAccessToken();
+  } catch {
+    modal.show('Authentication Required', 'Please connect to Spotify to continue.', '🔐');
+    return;
+  }
+
+  if (!mood) {
+    modal.show('Input Required', 'Please enter your mood to generate a playlist.', '⚠️');
+    return;
+  }
+
+  if (!geminiKey) {
+    modal.show('API Key Required', 'Please enter and save your Gemini API Key.', '🤖');
+    return;
+  }
+
+  setLoading(document.getElementById('generateBtn'), true);
+
+  try {
+    const playlist = await createPlaylist(currentUserId, mood, spotifyToken);
+    currentPlaylistId = playlist.id;
+    playlistManager.setPlaylistId(currentPlaylistId);
+
+    const songs = await generateSongsForMood(mood, geminiKey);
+    document.getElementById('results').innerHTML = '';
+
+    const trackResults = await Promise.all(
+      songs.map(song => searchTrack(song.title, song.artist, spotifyToken))
+    );
+
+    const validTracks = trackResults.filter(Boolean);
+    const trackUris = validTracks.map(track => track.uri);
+
+    console.log(trackUris.length);
+    
+
+    if (trackUris.length > 0) {
+      await addTracksToPlaylist(currentPlaylistId, trackUris, spotifyToken);
     }
 
-    if (!mood) {
-        modal.show('Input Required', 'Please enter your mood to generate a playlist.', '⚠️');
-        return;
-    }
+    validTracks.forEach(track => renderTrack(track, document.getElementById('results')));
 
-    if (!geminiKey) {
-        modal.show('API Key Required', 'Please enter and save your Gemini API Key.', '🤖');
-        return;
-    }
+    await saveGeneratedTracks(validTracks);
+    await saveSessionData(mood, currentPlaylistId, true);
 
-    setLoading(document.getElementById('generateBtn'), true);
+    playlistManager.show(mood);
+    modal.show('Success', `Generated playlist "${mood}" with ${validTracks.length} songs!`, '🎵');
 
-    try {
-        const playlist = await createPlaylist(currentUserId, mood, spotifyToken);
-        currentPlaylistId = playlist.id;
-        playlistManager.setPlaylistId(currentPlaylistId);
-        
-        const songs = await generateSongsForMood(mood, geminiKey);
-        
-        document.getElementById('results').innerHTML = '';
-        const generatedTracks = [];
-        const trackUris = [];
-        
-        for (let i = 0; i < songs.length; i++) {
-            const song = songs[i];
-            setTimeout(async () => {
-                const track = await searchTrack(song.title, song.artist, spotifyToken);
-                if (track) {
-                    generatedTracks.push(track);
-                    trackUris.push(track.uri);
-                    renderTrack(track, document.getElementById('results'));
-                    
-                    await saveGeneratedTracks(generatedTracks);
-                    await saveSessionData(mood, currentPlaylistId, true);
-                    
-                    if (trackUris.length === songs.length) {
-                        try {
-                            await addTracksToPlaylist(currentPlaylistId, trackUris, spotifyToken);
-                            playlistManager.show(mood);
-                        } catch (error) {
-                            console.error('Error adding tracks to playlist:', error);
-                        }
-                    }
-                }
-            }, i * 100);
-        }
-
-        setLoading(document.getElementById('generateBtn'), false);
-        modal.show('Success', `Generated playlist "${mood}" with ${songs.length} songs!`, '🎵');
-
-    } catch (error) {
-        setLoading(document.getElementById('generateBtn'), false);
-        modal.show('Error', 'Error creating playlist. Please try again.', '❌');
-        console.error('Playlist ERROR:', error);
-    }
+  } catch (error) {
+    console.error('Playlist ERROR:', error);
+    modal.show('Error', 'Error creating playlist. Please try again.', '❌');
+  } finally {
+    setLoading(document.getElementById('generateBtn'), false);
+  }
 }
+
 
 async function handlePlaylistDeletion() {
     try {

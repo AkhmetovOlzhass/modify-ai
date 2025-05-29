@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Moodify</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎵 Moodify AI</h1>
+      <p>AI-powered mood-based playlists</p>
+      <div class="visualizer-container">
+        <div class="visualizer-bar" style="animation: barHeight1 1.3s ease-in-out infinite;"></div>
+        <div class="visualizer-bar" style="animation: barHeight2 1.1s ease-in-out infinite;"></div>
+        <div class="visualizer-bar" style="animation: barHeight3 1.7s ease-in-out infinite;"></div>
+        <div class="visualizer-bar" style="animation: barHeight4 1.4s ease-in-out infinite;"></div>
+        <div class="visualizer-bar" style="animation: barHeight5 1.2s ease-in-out infinite;"></div>
+      </div>
+    </div>
+
+    <div id="userProfile" class="user-profile hidden">
+      <div class="user-avatar">🎧</div>
+      <div class="user-info">
+        <div class="user-name">Spotify User</div>
+        <div class="user-status">
+          <div class="status-icon"></div>
+          <span>Connected</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="loginCard" class="card">
+      <button id="loginBtn" class="btn btn-primary">
+        <span class="btn-text">🔐 Connect to Spotify</span>
+        <span class="loading hidden"></span>
+      </button>
+    </div>
+
+    <div class="card" id="geminiForm">
+      <div class="input-group">
+        <label for="geminiKey">🤖 Gemini API Key</label>
+        <input type="password" id="geminiKey" class="input" placeholder="Enter your Gemini API key" />
+      </div>
+      <button id="saveGeminiKey" class="btn btn-secondary">Save API Key</button>
+    </div>
+
+    <div class="card hidden" id="geminiSaved">
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span>Gemini API key configured</span>
+        <button id="editGeminiKey" class="edit-btn">✏️ Edit</button>
+      </div>
+    </div>
+
+    <div class="card hidden" id="moodSection">
+      <div class="input-group">
+        <label for="moodInput">😊 What's your mood today?</label>
+        <input type="text" id="moodInput" class="input" placeholder="e.g., happy, relaxed, energetic..." />
+        <div id="moodSuggestions" class="mood-suggestions"></div>
+      </div>
+      <button id="generateBtn" class="btn btn-primary">
+        <span class="btn-text">✨ Generate Playlist</span>
+        <span class="loading hidden"></span>
+      </button>
+    </div>
+
+    <div id="playlistActions" class="card hidden">
+      <div class="playlist-info">
+        <div class="playlist-title">🎵 Your Moodify Playlist</div>
+        <div id="playlistDescription" class="playlist-description">Ready to listen!</div>
+      </div>
+      <div class="playlist-buttons">
+        <button id="openPlaylistBtn" class="btn btn-primary">
+          🎧 Open in Spotify
+        </button>
+        <button id="deletePlaylistBtn" class="btn btn-secondary">
+          🗑️ Delete Playlist
+        </button>
+      </div>
+    </div>
+
+    <div id="results"></div>
+  </div>
+
+  <div id="customModal" class="modal">
+    <div class="modal-content">
+      <div id="modalIcon" class="modal-icon">ℹ️</div>
+      <div id="modalTitle" class="modal-title">Information</div>
+      <div id="modalMessage" class="modal-message">This is a message</div>
+      <button id="modalClose" class="btn btn-secondary">OK</button>
+    </div>
+  </div>
+
+  <script type="module" src="index.js"></script>
+</body>
+</html>

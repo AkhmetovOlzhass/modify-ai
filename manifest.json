@@ -1,12 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Moodify AI",
+  "name": "Moodify AI - Playlist generator in Spotify",
   "description": "AI-powered mood-based playlists using Gemini and Spotify",
   "version": "1.0",
   "permissions": [
     "identity",
-    "storage",
-    "tabs"
+    "storage"
   ],
   "action": {
     "default_popup": "src/popup/popup.html"

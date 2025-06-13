@@ -19,6 +19,7 @@ if (typeof chrome !== 'undefined' && chrome.runtime) {
 async function handleAuth(sendResponse) {
     try {
         const codeVerifier = generateCodeVerifier();
+        await chrome.storage.local.set({ codeVerifier });
         const codeChallenge = await generateCodeChallenge(codeVerifier);
 
         const authURL = `https://accounts.spotify.com/authorize?` +
@@ -52,6 +53,8 @@ async function handleAuth(sendResponse) {
                     });
                     return;
                 }
+                
+                const { codeVerifier } = await chrome.storage.local.get('codeVerifier');
                 
                 const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
                     method: 'POST',
